@@ -104,8 +104,8 @@
           
         };
       flake.overlays.default = (final: prev: {
-            neovix = self.packages.${final.system}.nvim;
+            nvix = self.packages.${final.system}.nvim;
+
       });
     };
-
 }
