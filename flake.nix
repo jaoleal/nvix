@@ -64,7 +64,7 @@
   };
   outputs =
     # NOTE: Not use flake-parts or understand it good enough to use everywhere
-    { nixvim, flake-parts, ... }@inputs:
+    { self, nixvim, flake-parts, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems =
         [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -97,9 +97,15 @@
             default =
               nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
           };
-          flake.overlays.default = (final: prev: {
-          neovix = self.packages.${final.system}.nvim;
-          });
+          packages = {
+            default = nvim;
+            nvim = nvim;
+          };
+          
         };
+      flake.overlays.default = (final: prev: {
+            neovix = self.packages.${final.system}.nvim;
+      });
     };
+
 }
