@@ -85,10 +85,8 @@
           nixvim' = nixvim.legacyPackages.${system};
           nixvimModule = {
             inherit pkgs;
-            module = import ./config; # import the module directly
-            # You can use `extraSpecialArgs` to pass additional arguments to your module files
+            module = import ./config;
             extraSpecialArgs = {
-              # inherit (inputs) foo;
               inherit inputs opts;
             } // import ./lib;
           };
@@ -99,11 +97,9 @@
             default =
               nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
           };
-
-          packages = {
-            # Lets you run `nix run .` to start nixvim
-            default = nvim;
-          };
+          flake.overlays.default = (final: prev: {
+          neovix = self.packages.${final.system}.nvim;
+          });
         };
     };
 }
